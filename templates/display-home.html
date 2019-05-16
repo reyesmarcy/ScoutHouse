@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <h2>Home Value</h2>
+    <div>
+        Home Value : {{ zest }} 
+        <br>
+        Est. Property Taxes : {{ property_taxes }}
+        <br>
+        Est. Homeowners Insurance : {{ ho_ins }}
+        <br>
+        Est. Monthly Mortgage Payment : {{ mort_pay }}
+        <br>
+        Monthly Salary: {{ mo_salary }}
+        <br>
+        Remaining Budget: {{ remaining_budget }}
+        <br>
+
+    </div>  
+
+
+
+
+{% endblock %}

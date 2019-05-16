@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-xs-12">
+
+      <h2>Which Home Would You Like to See?</h2>
+      
+      <form method="GET" action="/displayhome">
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input id="adress" class="form-control" type="text" name="address" required>
+        </div>
+
+        <div class="form-group">
+          <label for="citystatezip">City/State/Zip</label>
+          <input id="citystatezip" class="form-control" type="text" name="citystatezip" required>
+        </div>
+
+        <input type="submit" value="Submit your Info!" class="btn btn-primary">
+
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock %}

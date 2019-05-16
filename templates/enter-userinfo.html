@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-xs-12">
+
+      <h2>Enter Some Basic Info</h2>
+      
+      <form method="GET" action="/show-userprofile">
+
+        <div class="form-group">
+          <label for="gross-salary">Gross Salary</label>
+          <input id="gross-salary" class="form-control" type="number" name="salary" required>
+        </div>
+
+        <div class="form-group">
+          <label for="downpayment">Downpayment Amount*</label>
+          <input id="downpayment" class="form-control" type="number" name="downpayment">
+        </div>
+
+        <div class="form-group">
+          <label for="other-debts">Monthly Amount of Other Debts</label>
+          <input id="other-debts" class="form-control" type="number" name="debts" required>
+        </div>
+
+        <input type="submit" value="Submit your Info!" class="btn btn-primary">
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+{% endblock %}
