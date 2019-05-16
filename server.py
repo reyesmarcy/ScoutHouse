@@ -59,7 +59,6 @@ def display_home():
 
     url = 'http://www.zillow.com/webservice/GetSearchResults.htm'
 
-    # parameters = {'zws-id' : "X1-ZWz1h23scyeoej_4zss3",
     parameters = {'zws-id': os.environ.get("ZILLOW_ID"),
                   'address': address,
                   'citystatezip': citystatezip}
