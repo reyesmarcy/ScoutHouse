@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <h2>Region Details</h2>
+
+    {% for region in region_list %}
+
+        {{ region['name'] }} : {{ region.get('zindex', {}).get('#text', 0) }}
+
+
+        <br>
+
+    {% endfor %}
+
+    *Note that 0 indicates: Z-Index not available (and not 0 value)
+
+{% endblock %}

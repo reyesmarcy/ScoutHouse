@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    <h2>Home Value</h2>
+    <h2>Home Details</h2>
     <div>
         Home Value : {{ zest }} 
         <br>
@@ -18,6 +18,14 @@
         <br>
         Remaining Budget: {{ remaining_budget }}
         <br>
+        {% if session.get('username') %}
+        
+            {% if budget > mort %}
+                You can afford this! :) 
+            {% else: %}
+                You too poor, fool! 
+            {% endif %}  
+        {% endif %}
 
     </div>  
 

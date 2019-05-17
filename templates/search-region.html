@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-xs-12">
+
+      <h2>Which Region Would You Like to See?</h2>
+      
+      <form method="GET" action="/displayregion">
+
+        <div class="form-group">
+          <label for="city">City</label>
+          <input id="city" class="form-control" type="text" name="city" required>
+        </div>
+
+        <div class="form-group">
+          <label for="state">State</label>
+          <input id="state" class="form-control" type="text" name="state" required>
+        </div>
+
+        <input type="submit" value="Submit your Info!" class="btn btn-primary">
+
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock %}

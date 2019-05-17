@@ -8,9 +8,25 @@
 
     <div class="col-xs-12">
 
+      {% if session.get('username') %}
+        You are already logged in! No need to sign up
+        {% else %}
+        Go and Sign up! 
+        {% endif %}
+
       <h2>Enter Some Basic Info</h2>
       
-      <form method="GET" action="/show-userprofile">
+      <form action="/userinfo" method="post">
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" class="form-control" type="text" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" class="form-control" type="text" name="password" required>
+        </div>
 
         <div class="form-group">
           <label for="gross-salary">Gross Salary</label>

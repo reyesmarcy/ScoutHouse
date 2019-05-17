@@ -8,5 +8,11 @@
         {% block content %}CONTENT HERE{% endblock %}
     </div>
 
+    <ul>
+        {% for message in get_flashed_messages() %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    
 </body>
 </html>
