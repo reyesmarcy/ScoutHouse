@@ -9,6 +9,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import xmltodict
 from calculator import * 
 
+
 from model import User, connect_to_db, db
 
 
@@ -16,6 +17,12 @@ app = Flask(__name__)
 # A secret key is needed to use Flask sessioning features
 app.secret_key = 'this-should-be-something-unguessable'
 
+app.jinja_env.globals.update(format_numbers=format_numbers,
+                            calc_property_taxes=calc_property_taxes,
+                            calc_ho_ins=calc_ho_ins,
+                            calc_mortgage=calc_mortgage,
+                            calc_mo_salary=calc_mo_salary,
+                            rule_36=rule_36)
 
 @app.route("/")
 def homepage():
@@ -213,10 +220,80 @@ def display_region():
 
     region_list = order_dict['RegionChildren:regionchildren']['response']['list']['region']
 
+    # zindex = order_dict['RegionChildren:regionchildren']['response']['list']['region']['#text']
 
-    print(region_list)
+    # for region in region_list:
+    #     region_name = region['name']
+    #     region_zindex = region.get('zindex', {}).get('#text', 0)
+    #     # return region_name, region_zindex
+    #     print(region_name,  region_zindex)
+    #     print()
 
-    return render_template("display-region.html", region_list=region_list)
+    # region_dict = {}
+
+    # for region in region_list:
+    #     region['name'] = new_dict['region_name']
+    #     region.get('zindex', {}).get('#text', 0) = new_dict['region_zindex']
+
+
+
+
+    if "username" in session: 
+        email = session["username"]
+
+        user = User.query.filter(User.email == email).first()
+        user_id = user.user_id
+
+        downpayment = user.downpayment
+        salary = user.salary
+        other_debts = user.other_debts
+
+    else: 
+        downpayment = 0
+        salary = 200000
+        other_debts = 0
+
+
+    # {% for i in range(0, len) %}
+
+    #     <li>{{ region_list.region_name[i] }} : {{ region_list.region_zindex[i] }}</li>
+
+
+    # {% endfor %}
+
+    # {% for region in region_list %}
+
+    #     {{ region['name'] }} : {{ region.get('zindex', {}).get('#text', 0) }}
+    #     <br>
+
+    #     {% if {{ region.get('zindex', {}).get('#text', 0) }} != 0 %}
+    #         Neighborhood Average: {{ region.get('zindex', {}).get('#text', 0) }}
+
+    # property_taxes = calc_property_taxes(zestimate)
+    # ho_ins = calc_ho_ins(zestimate)
+    # mort_pay = calc_mortgage(zestimate, downpayment)
+    # mo_salary = calc_mo_salary(salary)
+    # remaining_budget = rule_36(mo_salary, other_debts)
+
+
+    # # Had to format mo_salary here because it kept messing up remaining_budget
+    # mo_salary = format_numbers(mo_salary)
+    # # Same with zestimate 
+    # zest = format_numbers(zest)
+    # # Test for jinja if statement
+    # budget = remaining_budget
+    # remaining_budget = format_numbers(remaining_budget)
+
+    # mort = mort_pay
+    # mort_pay = format_numbers(mort_pay)
+
+
+    return render_template("display-region.html", 
+                            region_list=region_list,
+                            downpayment=downpayment,
+                            salary=salary,
+                            other_debts=other_debts)
+
 
 
 
@@ -226,5 +303,8 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
     connect_to_db(app)
     app.run(host="0.0.0.0")
+
+
+
 
 

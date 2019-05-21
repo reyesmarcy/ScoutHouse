@@ -66,3 +66,6 @@ def rule_36(mo_salary, other_debts):
     #     print("You are too poor, fool!")
 
     return remaining_budget
+
+
+

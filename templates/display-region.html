@@ -8,12 +8,39 @@
 
     {% for region in region_list %}
 
-        {{ region['name'] }} : {{ region.get('zindex', {}).get('#text', 0) }}
+        {% set region_name = region['name'] %}
+        {% set region_zindex = region.get('zindex', {}).get('#text', 0) %}
+        
+        {{ region_name }} 
+        <br>
+        Median Cost of Home : {{ format_numbers(region_zindex) }}
+        <br>
 
+        {% if region_zindex|int != 0 %}
+            Property Taxes: {{ calc_property_taxes(region_zindex|int) }}
+            <br>
+            Homeowners Insurance: {{ calc_ho_ins(region_zindex|int) }}
+            <br>
+            Est. Mortgage Payments: {{ format_numbers(calc_mortgage(region_zindex|int, downpayment)) }}
+            <br>
+            Monthly Salary: {{ format_numbers(calc_mo_salary(salary)) }}
+            <br>
+            Remaining Budget: {{ format_numbers(rule_36(calc_mo_salary(salary), other_debts)) }}
+            <br>
 
+            {% if rule_36(calc_mo_salary(salary), other_debts) > calc_mortgage(region_zindex|int, downpayment) %}
+                You CAN afford this! 
+                <br>
+            {% else %}
+                You CANNOT afford this... 
+                <br>
+            {% endif %}
+
+        {% endif %}
         <br>
 
     {% endfor %}
+
 
     *Note that 0 indicates: Z-Index not available (and not 0 value)
 

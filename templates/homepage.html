@@ -6,7 +6,13 @@
 
     <h2>Welcome</h2> 
 
-    <h3><a href="/userinfo">Sign Up</a></h3>
+    <h3>
+        {% if session.get('username') %}
+        <a href="/userinfo">Update User Info</a></h3>
+        {% else %}
+        <a href="/userinfo">Sign Up</a></h3>
+        {% endif %}
+        
 
     <h3>
         {% if session.get('username') %}
