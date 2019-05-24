@@ -2,12 +2,13 @@ from pprint import pformat
 import os
 import requests
 
-from flask import Flask, render_template, redirect, flash, session, request
+from flask import Flask, render_template, redirect, flash, session, request, jsonify
 import jinja2
 from flask_debugtoolbar import DebugToolbarExtension
 
 import xmltodict
 from calculator import * 
+from zillowapi import *
 
 
 from model import User, connect_to_db, db
@@ -17,12 +18,44 @@ app = Flask(__name__)
 # A secret key is needed to use Flask sessioning features
 app.secret_key = 'this-should-be-something-unguessable'
 
+
 app.jinja_env.globals.update(format_numbers=format_numbers,
                             calc_property_taxes=calc_property_taxes,
                             calc_ho_ins=calc_ho_ins,
                             calc_mortgage=calc_mortgage,
                             calc_mo_salary=calc_mo_salary,
                             rule_36=rule_36)
+
+class SearchResults: 
+
+    def __init__(self, results):
+        self.zestimate = results['zestimate']['amount']['#text']
+        self.links = results['links']
+        self.home_details = results['links']['homedetails']
+        self.graph_data = results['links']['graphsanddata']
+        self.map_this = results['links']['mapthishome']
+        self.home_latitude = results['address']['latitude']
+        self.home_longitude = results['address']['longitude']
+
+# # class RegionResults:
+
+#     def __init__(self, results):
+#         self.region_list = results['region']
+
+
+class Home:
+
+    def __init__(self, user, zestimate):
+        self.property_taxes = calc_property_taxes(zestimate)
+        self.ho_ins = calc_ho_ins(zestimate)
+        self.mort_pay = calc_mortgage(zestimate, user.downpayment)
+        self.mo_salary = calc_mo_salary(user.salary)
+        self.remaining_budget = rule_36(self.mo_salary, user.other_debts)
+
+# class Region:
+#     def __init__(self, user, zestimate):
+#         self.
+
 
 @app.route("/")
 def homepage():
@@ -57,20 +90,6 @@ def show_userinfo():
 
     return redirect("/")
 
-# @app.route("/show-userprofile")
-# def show_userprofile():
-#     """Display the user info that was entered"""
-
-#     salary = request.args.get('query')
-#     downpayment = request.args.get('downpayment')
-#     debts = request.args.get('debts')
-
-#     # Need to store in database
-
-#     return render_template("show-userprofile.html",
-#                             salary=salary,
-#                             downpayment=downpayment,
-#                             debts=debts)
 
 
 @app.route("/login", methods=["GET"])
@@ -109,6 +128,43 @@ def search_home_form():
     return render_template("search-home.html")
 
 
+@app.route('/monthly-budget.json')
+def monthly_budget_data():
+    """Return data about monthly budget"""
+    if "username" in session: 
+        email = session["username"]
+
+        user = User.query.filter(User.email == email).first()
+    other_debts = int(user.other_debts)
+    
+    zest = 100
+
+    labels = ["Remaining Monthly Income", "Other Monthly Debts", "PITI"]
+    data_dict = {
+                "labels": [
+                    "Remaining Monthly Income",
+                    "Other Monthly Debts",
+                    "PITI"
+                ],
+                "datasets": [
+                    {
+                        # "data": [300, other_debts, zest], 
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56"
+                        ]
+                    }]
+            }
+    return jsonify(data_dict)
+    return render_template('display-home.html')
+
+
 @app.route("/displayhome")
 def display_home():
     """Display home information page"""
@@ -116,26 +172,22 @@ def display_home():
     address = request.args.get('address')
     citystatezip = request.args.get('citystatezip')
 
-    url = 'http://www.zillow.com/webservice/GetSearchResults.htm'
+    try:
+        results = getSearchResults(address, citystatezip)
+    # print("LOOOOOOK AAAAT MEEEEEE")
+    # print(results)
+        zestimate = int(SearchResults(results).zestimate)
 
-    parameters = {'zws-id': os.environ.get("ZILLOW_ID"),
-                  'address': address,
-                  'citystatezip': citystatezip}
-
-
-    response = requests.get(url, params=parameters)
-
-    data = response.text
-    new_dict = xmltodict.parse(data)
-
-    zest = new_dict['SearchResults:searchresults']['response']['results']['result']['zestimate']['amount']['#text']
-    zestimate = int(zest)
+    except requests.exceptions.RequestException as e:
+        flash('Please enter a valid address.')
+        return redirect("/")
 
 
     #NEED TO CHANGE DOWNPAYMENT/SALARY  
     if "username" in session: 
         email = session["username"]
 
+        # Query for user object 
         user = User.query.filter(User.email == email).first()
         user_id = user.user_id
 
@@ -149,47 +201,33 @@ def display_home():
         salary = 200000
         other_debts = 0
 
+    # Instantiate Home Object
+    home = Home(user, zestimate)
 
-    property_taxes = calc_property_taxes(zestimate)
-    ho_ins = calc_ho_ins(zestimate)
-    mort_pay = calc_mortgage(zestimate, downpayment)
-    mo_salary = calc_mo_salary(salary)
-    remaining_budget = rule_36(mo_salary, other_debts)
+    affordable = is_underbudget(home.remaining_budget,
+                                home.property_taxes,
+                                home.ho_ins, 
+                                home.mort_pay)
 
-    print("CHECK THESE NUMBERS!!!!!")
-    print(mort_pay)
-
-    # Had to format mo_salary here because it kept messing up remaining_budget
-    mo_salary = format_numbers(mo_salary)
-    # Same with zestimate 
-    zest = format_numbers(zest)
-    # Test for jinja if statement
-    budget = remaining_budget
-    remaining_budget = format_numbers(remaining_budget)
-
-    mort = mort_pay
-    mort_pay = format_numbers(mort_pay)
-
-    # Tested with booleans, and found out that test2bool returns false, when it should return TRUE!
-    # For user tree@tree.com, who is too poor for the home 
-    # It looks like it has something to do with the formatting (whether its in dollars or left as an int)
-    # Need to refactor to make all the formatting numbers cleaner as it's split up over files.... 
-    test_bool = budget < mort
-    test2_bool = remaining_budget < mort_pay 
-    print("BUDGET < MORT: ", test_bool)
-    print("remaining < mort pay: ", test2_bool)
-
+    mo_salary_left = home.mo_salary
 
     return render_template("display-home.html",
-                            data = pformat(data),
-                            zest=zest,
-                            property_taxes=property_taxes,
-                            ho_ins=ho_ins,
-                            mort_pay=mort_pay,
-                            mo_salary=mo_salary,
-                            remaining_budget=remaining_budget,
-                            budget=budget,
-                            mort=mort)
+                            # data = pformat(data),
+                            zestimate=format_numbers(zestimate),
+                            property_taxes=format_numbers(home.property_taxes),
+                            ho_ins=format_numbers(home.ho_ins),
+                            mort_pay=format_numbers(home.mort_pay),
+                            mo_salary=format_numbers(home.mo_salary),
+                            remaining_budget=format_numbers(home.remaining_budget),
+                            affordable=affordable,
+                            user=user, 
+                            rand_var = ((home.ho_ins + home.property_taxes)/12 + home.mort_pay),
+                            mo_salary_left=mo_salary_left)
+
+    # except:
+    #     flash('Please enter a valid address.')
+    #     return redirect("/")
+  
 
 
 @app.route("/searchregion")
@@ -204,21 +242,19 @@ def display_region():
 
     city = request.args.get('city')
     state = request.args.get('state')
-    childtype = "neighborhood"
+    
+    if "username" in session: 
+            email = session["username"]
 
-    url = 'http://www.zillow.com/webservice/GetRegionChildren.htm'
+        # Query for user object 
+            user = User.query.filter(User.email == email).first()
+            user_id = user.user_id
 
-    parameters = {'zws-id': os.environ.get("ZILLOW_ID"),
-                  'state': state,
-                  'city': city,
-                  'childtype': childtype}
+    results = getRegion(city, state)
+    # zestimate = int(SearchResults(results).zestimate)
 
-    response = requests.get(url, params=parameters)
-
-    data = response.text
-    order_dict = xmltodict.parse(data, dict_constructor=dict)
-
-    region_list = order_dict['RegionChildren:regionchildren']['response']['list']['region']
+    # try:
+    #     region_list = order_dict['RegionChildren:regionchildren']['response']['list']['region']
 
     # zindex = order_dict['RegionChildren:regionchildren']['response']['list']['region']['#text']
 
@@ -238,20 +274,20 @@ def display_region():
 
 
 
-    if "username" in session: 
-        email = session["username"]
+        # if "username" in session: 
+        #     email = session["username"]
 
-        user = User.query.filter(User.email == email).first()
-        user_id = user.user_id
+        #     user = User.query.filter(User.email == email).first()
+        #     user_id = user.user_id
 
-        downpayment = user.downpayment
-        salary = user.salary
-        other_debts = user.other_debts
+        #     downpayment = user.downpayment
+        #     salary = user.salary
+        #     other_debts = user.other_debts
 
-    else: 
-        downpayment = 0
-        salary = 200000
-        other_debts = 0
+        # else: 
+        #     downpayment = 0
+        #     salary = 200000
+        #     other_debts = 0
 
 
     # {% for i in range(0, len) %}
@@ -269,31 +305,20 @@ def display_region():
     #     {% if {{ region.get('zindex', {}).get('#text', 0) }} != 0 %}
     #         Neighborhood Average: {{ region.get('zindex', {}).get('#text', 0) }}
 
-    # property_taxes = calc_property_taxes(zestimate)
-    # ho_ins = calc_ho_ins(zestimate)
-    # mort_pay = calc_mortgage(zestimate, downpayment)
-    # mo_salary = calc_mo_salary(salary)
-    # remaining_budget = rule_36(mo_salary, other_debts)
-
-
-    # # Had to format mo_salary here because it kept messing up remaining_budget
-    # mo_salary = format_numbers(mo_salary)
-    # # Same with zestimate 
-    # zest = format_numbers(zest)
-    # # Test for jinja if statement
-    # budget = remaining_budget
-    # remaining_budget = format_numbers(remaining_budget)
-
-    # mort = mort_pay
-    # mort_pay = format_numbers(mort_pay)
-
+    for region in results:
+        zindex = region.get('zindex', {}).get('#text', 0)
+        home = Home(user, int(zindex))
 
     return render_template("display-region.html", 
-                            region_list=region_list,
-                            downpayment=downpayment,
-                            salary=salary,
-                            other_debts=other_debts)
-
+                            region_list=results,
+                            downpayment=user.downpayment,
+                            salary=user.salary,
+                            other_debts=user.other_debts,
+                            home=home,
+                            zindex=zindex)
+# except:
+    #     flash('Please enter a valid city.')
+    #     return redirect("/")
 
 
 
@@ -306,5 +331,13 @@ if __name__ == "__main__":
 
 
 
+# {% if session.get('username') %}
+        
+#             {% if budget > mort %}
+#                 You can afford this! :) 
+#             {% else: %}
+#                 You too poor, fool! 
+#             {% endif %}  
+#         {% endif %}
 
 

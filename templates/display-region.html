@@ -8,6 +8,8 @@
 
     {% for region in region_list %}
 
+        THIS IS THE HOME PROPERTY TAXES: {{ home.property_taxes }}
+
         {% set region_name = region['name'] %}
         {% set region_zindex = region.get('zindex', {}).get('#text', 0) %}
         

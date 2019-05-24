@@ -10,14 +10,16 @@ def format_numbers(number):
 def calc_property_taxes(zestimate):
     """Return estimate of property taxes based on home value"""
 
-    property_taxes = format_numbers(zestimate * .001)
+    # property_taxes = format_numbers(zestimate * .001)
+    property_taxes = (zestimate * .001)
     return property_taxes
 
 
 def calc_ho_ins(zestimate):
     """Return estimate of homeowners insurance based on home value and rules of thumb"""
 
-    ho_ins = format_numbers((zestimate/1000) * 3.5)
+    # ho_ins = format_numbers((zestimate/1000) * 3.5)
+    ho_ins = (zestimate/1000) * 3.5
     return ho_ins
 
 
@@ -59,13 +61,15 @@ def rule_36(mo_salary, other_debts):
     # remaining_budget = format_numbers(remaining_budget)
 
 
-
-    # if remaining_budget > mort_pay:
-    #     print("You can afford this home!")
-    # else:
-    #     print("You are too poor, fool!")
-
     return remaining_budget
+
+def is_underbudget(remaining_budget, property_taxes, ho_ins, payment):
+    """ Check if the payments are affordable based on 36% of budget"""
+    mo_property_taxes = property_taxes/12
+    mo_ho_ins = ho_ins/12
+    piti = mo_property_taxes + mo_ho_ins + payment
+    return remaining_budget > piti
+
 
 
 

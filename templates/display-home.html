@@ -6,7 +6,7 @@
 
     <h2>Home Details</h2>
     <div>
-        Home Value : {{ zest }} 
+        Home Value : {{ zestimate }} 
         <br>
         Est. Property Taxes : {{ property_taxes }}
         <br>
@@ -20,7 +20,7 @@
         <br>
         {% if session.get('username') %}
         
-            {% if budget > mort %}
+            {% if affordable %}
                 You can afford this! :) 
             {% else: %}
                 You too poor, fool! 
@@ -29,7 +29,49 @@
 
     </div>  
 
+    <div class="melon-chart">
+        <canvas id="donutChart"></canvas>
+        <div id="donutLegend" class="chart-legend"></div>
+    </div>
 
+    <script type="text/javascript">
+        const options = {
+            responsive: true
+        };
+
+        // Make donut chart of monthly budget 
+
+        let ctx_donut = $("#donutChart").get(0).getContext("2d");
+
+        var random_var = '{{ rand_var }}';
+        var random_var2 = '{{ user.other_debts}}';
+        var random_var3 = '{{ mo_salary_left }}';
+        var random_var4 = random_var3 - random_var2 - random_var
+    
+        // var random_var = {{ mort_pay|tojson }}; 
+
+        // $.get("/monthly-budget.json", function (data) {
+        let myDonutChart = new Chart(ctx_donut, {
+                                              type: 'doughnut',
+                                              data: {
+                                                labels: ["Remaining Monthly Income", "PITI", "Other Debts"],
+                                                datasets: [
+                                                {
+                                                "data": [random_var4, random_var, random_var2],
+                                                "backgroundColor": [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56"
+                                                ]
+                                                }
+                                                ]
+                                              },
+                                              options: options
+                                            });
+        $('#donutLegend').html(myDonutChart.generateLegend());
+        // });
+
+    </script>
 
 
 {% endblock %}
