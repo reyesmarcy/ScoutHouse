@@ -12,23 +12,23 @@ BASE_URL = 'http://www.zillow.com/webservice'
 def getSearchResults(address, citystatezip):
     
     url = f'{BASE_URL}/GetSearchResults.htm'
-    try: 
+     
 
-      parameters = {'zws-id': ZWS_ID,
-                    'address': address,
-                    'citystatezip': citystatezip}
+    parameters = {'zws-id': ZWS_ID,
+                  'address': address,
+                  'citystatezip': citystatezip}
 
-      response = requests.get(url, params=parameters)
-      print("LOOK AT ME!!!!")
-      print(response)
-      data = response.text
-      resp_dict = xmltodict.parse(data)
+    response = requests.get(url, params=parameters)
+    data = response.text
+    resp_dict = xmltodict.parse(data)
+    
 
+    if resp_dict['SearchResults:searchresults']['response']['results']['result']: 
       results = resp_dict['SearchResults:searchresults']['response']['results']['result']
 
       return results
 
-    except requests.exceptions.RequestException as e:
+    else:
         flash('Please enter a valid address.')
         return redirect("/")
 

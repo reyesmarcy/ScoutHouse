@@ -172,13 +172,13 @@ def display_home():
     address = request.args.get('address')
     citystatezip = request.args.get('citystatezip')
 
-    try:
+    try: 
         results = getSearchResults(address, citystatezip)
-    # print("LOOOOOOK AAAAT MEEEEEE")
-    # print(results)
+        print("LOOOOOOK AAAAT MEEEEEE")
+        print(results)
         zestimate = int(SearchResults(results).zestimate)
 
-    except requests.exceptions.RequestException as e:
+    except:
         flash('Please enter a valid address.')
         return redirect("/")
 
@@ -202,7 +202,13 @@ def display_home():
         other_debts = 0
 
     # Instantiate Home Object
-    home = Home(user, zestimate)
+
+    try:
+        home = Home(user, zestimate)
+
+    except:
+        flash('Please enter a valid address.')
+        return redirect("/")
 
     affordable = is_underbudget(home.remaining_budget,
                                 home.property_taxes,
@@ -210,6 +216,7 @@ def display_home():
                                 home.mort_pay)
 
     mo_salary_left = home.mo_salary
+
 
     return render_template("display-home.html",
                             # data = pformat(data),

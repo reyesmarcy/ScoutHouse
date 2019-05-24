@@ -42,6 +42,38 @@
     </div>
 
 
+    <div class="slidecontainer">
+        <input type="range" min="1" max="50" value="36" class="slider" id="myRange">
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            
+            <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
+                <strong>Slide to see how much you can afford</strong></h3>
+            <hr>
+
+            <div class="slidecontainer">
+                <input type="range" min="1" max="50" value="36" class="slider" id="myRange">
+            </div>
+
+            <div class="row">
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+                <div class="col-md-6 text-center pb-5">
+
+                    <h2><span class="badge blue lighten-2 mb-4">Client pays</span></h2>
+                    <h2 class="display-4" style="color:#0d47a1"><strong id="clientPrice">319$</strong></h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <script type="text/javascript">
         const options = {
             responsive: true
@@ -92,6 +124,17 @@
             myDonutChart.update();
         }
 
+        /* For first slider */ 
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value; 
+
+        slider.oninput = function() {
+            output.innerHTML = this.value; 
+        }
+
+
+        
     </script>
 
 
