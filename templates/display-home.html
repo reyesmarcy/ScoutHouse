@@ -18,6 +18,8 @@
         <br>
         Remaining Budget: {{ remaining_budget }}
         <br>
+        lat/long: {{ home_latitude }}, {{ home_longitude }}
+        <br>
         {% if session.get('username') %}
         
             {% if affordable %}
@@ -36,15 +38,27 @@
         </h1>
     </div>
 
-    <div class="melon-chart">
-        <canvas id="donutChart"></canvas>
-        <div id="donutLegend" class="chart-legend"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <canvas id="donutChart"></canvas>
+                <div id="donutLegend" class="chart-legend"></div>
+            </div>
+            <div class="col">
+                <canvas id="barChart"></canvas>
+                <div id="barLegend" class="chart-legend"></div>
+            </div>    
+        </div>
     </div>
 
+    <!-- <div class="bubbleChart"></div> -->
 
-    <div class="slidecontainer">
+
+   <!--  <div class="slidecontainer">
         <input type="range" min="1" max="50" value="36" class="slider" id="myRange">
-    </div>
+        <p id="demo"></p>
+        <button onclick="myFunction()">Try it</button>
+    </div> -->
 
     <div class="card">
         <div class="card-body">
@@ -54,27 +68,43 @@
             <hr>
 
             <div class="slidecontainer">
-                <input type="range" min="1" max="50" value="36" class="slider" id="myRange">
+                <input type="range" min="1" max="100" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
+                
+                <span>
+                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}</p>
+                    Debt-to-Income Ratio
+                </span><span>
+                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ dti_ratio * mo_salary_left /100 }}</p>
+                    <br>
+                    Monthly Payment
+                </span>
             </div>
-
-            <div class="row">
-      <!-- Grid column -->
-
-      <!-- Grid column -->
-                <div class="col-md-6 text-center pb-5">
-
-                    <h2><span class="badge blue lighten-2 mb-4">Client pays</span></h2>
-                    <h2 class="display-4" style="color:#0d47a1"><strong id="clientPrice">319$</strong></h2>
-
-                </div>
-
-            </div>
-
         </div>
-
     </div>
 
+            <!-- <div class="slidecontainer">
+                <input style="background-color:green;width:36%" type="range" min="1" max="36" value="{{ dti_ratio }}" class="slider" id="myRange2"></input><input style="background-color:yellow;width:14%" type="range" min="36" max="100" value="{{ dti_ratio }}" class="slider" id="myRange3"></input><input style="background-color:red;width:50%" type="range" min="36" max="100" value="{{ dti_ratio }}" class="slider" id="myRange3"></input>            
+            </div> -->
+
+
+    <iframe width="600" height="450" frameborder="0" style="border:0"
+src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJpYu5FPHtj4ARkgr3qz5GhhE&key=AIzaSyDbqsyjf_TjqWV14JYv3EmpvQVv8j-mHtY" allowfullscreen></iframe>
+
+    <div id="map"></div>
+
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -34.397, lng: 150.644}, 
+                zoom:8
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbqsyjf_TjqWV14JYv3EmpvQVv8j-mHtY&callback=initMap"
+    async defer></script>
     <script type="text/javascript">
+
         const options = {
             responsive: true
         };
@@ -111,30 +141,61 @@
         $('#donutLegend').html(myDonutChart.generateLegend());
         // });
 
+        let ctx_bar = $("#barChart").get(0).getContext("2d")
+
+        let myBarChart = new Chart(ctx_bar, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: ["Remaining Monthly Income", "PITI", "Other Debts"],
+                                            datasets: [
+                                                {
+                                                "data": [random_var4, random_var, random_var2],
+                                                "backgroundColor": [
+                                                    "#FF6384",
+                                                    "#36A2EB",
+                                                    "#FFCE56"
+                                                ]
+                                                }
+                                                ]
+                                              },
+                                              options: options
+                                            });
+                                        
+        $('#barLegend').html(myBarChart.generateLegend());
+
         var another_var = '{{ mo_salary_left }}' * .64; 
         var another_var2 = ('{{ mo_salary_left }}' * .36) - random_var2;
 
         function updateChart() {
             myDonutChart.data.datasets[0].data = [another_var, another_var2, random_var2];
             myDonutChart.update();
+            myBarChart.data.datasets[0].data = [another_var, another_var2, random_var2];
+            myBarChart.update();
         }
 
         function revertChart() {
             myDonutChart.data.datasets[0].data = [random_var4, random_var, random_var2];
             myDonutChart.update();
+            myBarChart.data.datasets[0].data = [random_var4, random_var, random_var2];
+            myBarChart.update();
         }
 
         /* For first slider */ 
         var slider = document.getElementById("myRange");
-        var output = document.getElementById("demo");
-        output.innerHTML = slider.value; 
+        // var output = document.getElementById("demo");
+        var sliderNumber = document.getElementById("sliderNumber");
+        // output.innerHTML = slider.value; 
+        var moPay = document.getElementById("moPay"); 
+        // var debts = '{{ other_debts }}'; 
 
-        slider.oninput = function() {
-            output.innerHTML = this.value; 
+
+
+        slider.onchange = function() {
+            sliderNumber.innerHTML = this.value; 
+            moPay.innerHTML = (slider.value * random_var3 / 100) - random_var2; 
         }
 
 
-        
     </script>
 
 

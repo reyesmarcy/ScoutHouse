@@ -61,7 +61,35 @@ class Home:
 def homepage():
     """Show homepage"""
 
+    # if "user" in session:
+    #     return redirect("/search")
+    # else:
+    #     return render_template("login_form.html")
+    #     # return redirect("/login")
     return render_template("homepage.html")
+
+# @app.route("/", methods=["POST"])
+# def login_process():
+
+#     email = request.form.get('email')
+#     password = request.form.get('password')
+
+#     user_query = User.query.filter(User.email == email, User.password == password).first()
+
+#     if user_query != None: 
+#         session["username"] = email
+#         flash('Logged in')
+#         user_id = user_query.user_id
+#         return redirect("/search")
+#     else: 
+#         flash('Username and password do not match.')
+#         return redirect("/")
+
+
+@app.route("/search")
+def search():
+
+    return render_template("/homepage.html")
 
 
 @app.route("/userinfo", methods=["GET"])
@@ -110,7 +138,7 @@ def login_process():
         session["username"] = email
         flash('Logged in')
         user_id = user_query.user_id
-        return redirect("/")
+        return redirect("/search")
     else: 
         flash('Username and password do not match.')
         return redirect("/login")
@@ -177,6 +205,7 @@ def display_home():
         print("LOOOOOOK AAAAT MEEEEEE")
         print(results)
         zestimate = int(SearchResults(results).zestimate)
+        
 
     except:
         flash('Please enter a valid address.')
@@ -201,14 +230,19 @@ def display_home():
         salary = 200000
         other_debts = 0
 
+    home_latitude = float(SearchResults(results).home_latitude)
+    home_longitude = float(SearchResults(results).home_longitude)
+
     # Instantiate Home Object
 
-    try:
-        home = Home(user, zestimate)
+    # try:
+    home = Home(user, zestimate)
+    # home_latitude = home.home_latitude
+    # home_longitude = home.home_longitude
 
-    except:
-        flash('Please enter a valid address.')
-        return redirect("/")
+    # except:
+        # flash('Please enter a valid address.')
+        # return redirect("/")
 
     affordable = is_underbudget(home.remaining_budget,
                                 home.property_taxes,
@@ -216,6 +250,7 @@ def display_home():
                                 home.mort_pay)
 
     mo_salary_left = home.mo_salary
+    dti_ratio = int(((home.property_taxes + home.ho_ins + home.mort_pay + user.other_debts) / home.mo_salary) * 100)
 
 
     return render_template("display-home.html",
@@ -229,7 +264,10 @@ def display_home():
                             affordable=affordable,
                             user=user, 
                             rand_var = ((home.ho_ins + home.property_taxes)/12 + home.mort_pay),
-                            mo_salary_left=mo_salary_left)
+                            mo_salary_left=mo_salary_left,
+                            dti_ratio=dti_ratio,
+                            home_latitude=home_latitude, 
+                            home_longitude=home_longitude)
 
     # except:
     #     flash('Please enter a valid address.')
@@ -257,7 +295,12 @@ def display_region():
             user = User.query.filter(User.email == email).first()
             user_id = user.user_id
 
-    results = getRegion(city, state)
+    try: 
+        results = getRegion(city, state)
+
+    except:
+        flash('Please enter a valid address.')
+        return redirect("/")
     # zestimate = int(SearchResults(results).zestimate)
 
     # try:
