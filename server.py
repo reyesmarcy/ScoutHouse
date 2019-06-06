@@ -233,6 +233,7 @@ def display_home():
     home_latitude = float(SearchResults(results).home_latitude)
     home_longitude = float(SearchResults(results).home_longitude)
 
+
     # Instantiate Home Object
 
     # try:
@@ -250,7 +251,7 @@ def display_home():
                                 home.mort_pay)
 
     mo_salary_left = home.mo_salary
-    dti_ratio = int(((home.property_taxes + home.ho_ins + home.mort_pay + user.other_debts) / home.mo_salary) * 100)
+    dti_ratio = int(((((home.property_taxes + home.ho_ins)/12) + home.mort_pay + user.other_debts) / home.mo_salary) * 100)
 
 
     return render_template("display-home.html",
@@ -267,7 +268,9 @@ def display_home():
                             mo_salary_left=mo_salary_left,
                             dti_ratio=dti_ratio,
                             home_latitude=home_latitude, 
-                            home_longitude=home_longitude)
+                            home_longitude=home_longitude, 
+                            address=address, 
+                            citystatezip=citystatezip)
 
     # except:
     #     flash('Please enter a valid address.')

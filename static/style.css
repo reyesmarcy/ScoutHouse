@@ -1,6 +1,6 @@
 .slidecontainer input {
     width:100%;
-    background: linear-gradient(to right, green 30%, yellow 80%, red);
+    background: linear-gradient(to right, green 30%, yellow 30%, red);
 }
 
 
@@ -71,6 +71,7 @@
     background: #000000;
 }
 
-#map {
-    height: 40%;
+#map, #pano {
+    height: 300px;
+    width: 600px;
 }
