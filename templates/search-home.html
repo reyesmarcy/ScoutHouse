@@ -1,33 +1,111 @@
 {% extends 'base.html' %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}Search Homes{% endblock %}
 
 {% block content %}
 
-<div class="row">
 
+<section class="demo-1 container-fluid d-flex justify-content-center align-items-center">
+<div id="home-search" class="row">
     <div class="col-xs-12">
 
-      <h2>Which Home Would You Like to See?</h2>
+      <!-- <h1 class="mx-5 text-light">Find Your Dream Home</h1> -->
+      <p class="display-4 mx-5 text-light" align="center">
+        Find Your Dream Home
+      </p>  
+
+      <h3 class="text-light" align="center">(or a more affordable one)</h3>
       
       <form method="GET" action="/displayhome">
 
-        <div class="form-group">
+        <div class="form-group text-light">
           <label for="address">Address</label>
           <input id="address" class="form-control" type="text" name="address" required></input>
         </div>
 
-        <div class="form-group">
+        <div class="form-group text-light">
           <label for="citystatezip">City/State/Zip</label>
           <input id="citystatezip" class="form-control" type="text" name="citystatezip" required>
         </div>
 
-        <input type="submit" value="Submit your Info!" class="btn btn-primary"></input>
+        <input type="submit" value="Look Up" class="btn btn-primary"></input>
 
       </form>
+      <p></p>
 
     </div>
 
   </div>
+</section>
+
+<section
+      class="container-fluid d-flex justify-content-center align-items-center"
+    >
+      <div class="row">
+        <div class="column">
+          <p class="display-4 p-5" align="center">
+            We have the most listings and constant updates.So you’ll never miss out.
+            <hr width="50%">
+          </p>
+        </div>
+      </div>
+
+</section>
+
+<div class="container-fluid pt-5 pb-5 drop-shadow">
+  <div class="row">
+    <div class="col col-box" style="border:2px solid #cecece;">
+      <p class="pt-5" style="text-align:center;">See your
+      <br>
+      <b>DTI RATIO</b>
+      <hr width="20%">
+    </p>
+      <p class="pb-3" style="text-align:center;">
+      See what your ideal DTI ratio would be for a particular home and where you currently stand. 
+      </p>
+    <!--   </p> -->
+    </div>
+    <div class="col col-box" style="border:2px solid #cecece;">
+      <p class="pt-5" style="text-align:center;">What's a
+      <br>
+      <b>DTI RATIO?</b>
+      <hr width="20%">
+      <p class="pb-3" style="text-align:center;"> 
+      Did that just go over your head? Well, no fear! Continue with your search and 
+      we'll explain what a DTI ratio is. 
+      </p>
+      </p>
+    </div>
+    <!-- <div class="col offset-1 shadow" style="border:2px solid #cecece;"> -->
+    <div class="col col-box" style="border:2px solid #cecece;">
+      <p class="pt-5" style="text-align:center;">Do I have enough
+      <br>
+      <i class="fas fa-dollar-sign"></i>
+      <i class="fas fa-dollar-sign"></i>
+      <i class="fas fa-dollar-sign"></i>
+      <hr width="20%">
+      <p class="pb-3" style="text-align:center;"> 
+      We'll see if you're as rich as you think you are. 
+    </div>
+  </div>
+</div>
+
+<section class="demo-1 container-fluid">
+<div class="row justify-content-center p-5">
+    <div class="col-10 white p-5" style="border:2px solid #cecece;">
+      Random text
+      <br>
+      more random text
+      <br>
+      even more random text
+      <br>
+      guess what? more random text
+
+  
+
+</section>
+
+
+
 
 {% endblock %}

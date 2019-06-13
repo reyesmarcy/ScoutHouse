@@ -8,40 +8,44 @@
 
     {% for region in region_list %}
 
-        THIS IS THE HOME PROPERTY TAXES: {{ home.property_taxes }}
-
         {% set region_name = region['name'] %}
         {% set region_zindex = region.get('zindex', {}).get('#text', 0) %}
-        
-        {{ region_name }} 
-        <br>
-        Median Cost of Home : {{ format_numbers(region_zindex) }}
-        <br>
 
-        {% if region_zindex|int != 0 %}
-            Property Taxes: {{ calc_property_taxes(region_zindex|int) }}
-            <br>
-            Homeowners Insurance: {{ calc_ho_ins(region_zindex|int) }}
-            <br>
-            Est. Mortgage Payments: {{ format_numbers(calc_mortgage(region_zindex|int, downpayment)) }}
-            <br>
-            Monthly Salary: {{ format_numbers(calc_mo_salary(salary)) }}
-            <br>
-            Remaining Budget: {{ format_numbers(rule_36(calc_mo_salary(salary), other_debts)) }}
-            <br>
-
-            {% if rule_36(calc_mo_salary(salary), other_debts) > calc_mortgage(region_zindex|int, downpayment) %}
-                You CAN afford this! 
+        <div class="card mt-5 ml-5" style="max-width:25rem;">
+            <div class="card-header">{{ region_name }}</div>
+            <div class="card-body">
+                Median Cost of Home : {{ format_numbers(region_zindex) }}
                 <br>
-            {% else %}
-                You CANNOT afford this... 
-                <br>
-            {% endif %}
 
-        {% endif %}
-        <br>
+                {% if region_zindex|int != 0 %}
+                    Property Taxes: {{ format_numbers(calc_property_taxes(region_zindex|int)) }}
+                    <br>
+                    Homeowners Insurance: {{ format_numbers(calc_ho_ins(region_zindex|int)) }}
+                    <br>
+                    Est. Mortgage Payments: {{ format_numbers(calc_mortgage(region_zindex|int, downpayment)) }}
+                    <br>
+                    <!-- Monthly Salary: {{ format_numbers(calc_mo_salary(salary)) }}
+                    <br> -->
+                    Remaining Budget: {{ format_numbers(rule_36(calc_mo_salary(salary), other_debts)) }}
+                    <br>
+                   
+
+
+                    {% if rule_36(calc_mo_salary(salary), other_debts) > calc_mortgage(region_zindex|int, downpayment) %}
+                        Affordability: Affordable
+                        <br>
+                    {% else %}
+                        Affordability: Stretching
+                        <br>
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
 
     {% endfor %}
+
+
 
 
     *Note that 0 indicates: Z-Index not available (and not 0 value)

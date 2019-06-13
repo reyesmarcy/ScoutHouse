@@ -4,10 +4,10 @@
 
 {% block content %}
 
-    <div class="container-fluid">
+    <div class="mt-2 container-fluid">
         <div class="row">
-            <div class = "col-1" style="font-size: 45px;">
-                <i class="fas fa-home fa-lg"></i>
+            <div class = "col-1">
+                <i class="fas fa-home fa-4x"></i>
             </div>
             <div class = "col-8">
                 <h3> {{ address }}</h3>
@@ -18,7 +18,8 @@
                 <h4>{{ zestimate }}</h4>
             </div>
         </div>
-        <div class="row">
+
+        <div class="mt-2 row">
             <div class = "col" id="pano">    
             </div>
             <div class="col" id="map">
@@ -27,20 +28,131 @@
     </div>
 
     <!-- <h2>Home Details</h2> -->
-    <div>
+    <section class="container-fluid pt-5">
+        <h3>Home Details</h3>
+        <div class="row">
+            <div class="col">
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center">
+                        <i class="far fa-building fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <b>Annual Property Taxes</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed to be ~1% of Estimated Home Value"></i>
+                        <br>
+                        {{ property_taxes }}  
+                    </div>
+                </div> 
+            </div>
+            <div class="col">
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center"> 
+                        <i class="fas fa-bolt fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <b>Annual Homeowners Insurance</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed an insurance cost of $3.50 for every $1,000 of home value insured."></i>
+                        <br>
+                        {{ ho_ins }}
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col">
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <b>Monthly Mortgage Payment</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed amortization of 30 years and an interest rate of 4.5% based on current rates."></i>
+                        <br>
+                        {{ mort_pay }} 
+                    </div>
+                </div> 
+            </div>
+            <div class="col">
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center">
+                        <i class="fas fa-briefcase fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <b>Monthly Salary</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary divided by 12. Duhhhh."></i>
+                        <br>
+                        {{ mo_salary }} 
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col">
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center">
+                      
+                        <i class="far fa-smile fa-2x"></i>
+                    </div>
+                    <div class="col">
+                        <b>Remaining Monthly Budget</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary minus other debts and house payments, silly billy!"></i>
+                        <br>
+                        {{ remaining_budget }} 
+                    </div>
+                </div>   
+            </div>
+                <div class="row justify content right">
+                    <div class="col-1 d-flex align-items-center">
+                        {% if affordable %} 
+                            <i class="far fa-smile fa-2x"></i>
+                        {% else %}
+                            <i class="far fa-sad-tear fa-2x"></i>
+                        {% endif %}
+                    </div>
+                    <div class="col justify content right">
+                        <b>Currently...</b>
+                        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Pretty self-explanatory"></i>
+                        <br>
+                        {% if affordable %}
+                            Affordable! 
+                        {% else: %}
+                            Not affordable. 
+                        {% endif %}  
+                    </div>
+                </div>   
+     
+        </div>
+    </section>
+
+
+    <!-- <div class="pt-3"> -->
        <!--  Home Value : {{ zestimate }} 
         <br> -->
-        Est. Property Taxes : {{ property_taxes }}
+        <!-- Property Taxes  -->
+        <!-- <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed to be ~1% of Estimated Home Value"></i>
+        : {{ property_taxes }} -->
+        <!-- <a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a> -->
+<!-- </button> -->
+        <!-- <br>
+        Homeowners Insurance 
+        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed an insurance cost of $3.50 for every $1,000 of home value insured."></i>
+        : {{ ho_ins }}
         <br>
-        Est. Homeowners Insurance : {{ ho_ins }}
+        Monthly Mortgage Payment 
+        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed amortization of 30 years and 
+        an interest rate of 4.5% based on current rates."></i>
+        : {{ mort_pay }}
         <br>
-        Est. Monthly Mortgage Payment : {{ mort_pay }}
+        Monthly Salary 
+        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary divided by 12. Duhhhh."></i>
+        : {{ mo_salary }}
         <br>
-        Monthly Salary: {{ mo_salary }}
-        <br>
-        Remaining Budget: {{ remaining_budget }}
-        <br>
-        lat/long: {{ home_latitude }}, {{ home_longitude }}
+        Remaining Budget 
+        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary minus other debts and house payments, silly billy!"></i>
+        : {{ remaining_budget }}
+        <br> -->
+        <!-- {{ ideal_ann_salary }} -->
+        <!-- lat/long: {{ home_latitude }}, {{ home_longitude }}
         <br>
         {% if session.get('username') %}
         
@@ -49,9 +161,42 @@
             {% else: %}
                 You too poor, fool! 
             {% endif %}  
-        {% endif %}
+        {% endif %} -->
 
-    </div>  
+<!--     </div>   -->
+    <hr width=60%>
+
+    <div class="pt-5 row" id="featurerow">
+
+      <section class="col feature text-center">
+        <i class="fas fa-certificate"></i>
+        <b>What's DTI?</b>
+        <p>
+          The debt-to-income ratio is a personal finance measure
+          that compares your monthly debt payments (e.g. mortgage and car payments) 
+          to your monthly gross income (think: income before taxes are taken out!)
+        </p>
+      </section>
+
+      <section class="col feature text-center">
+        <i class="fas fa-certificate"></i>
+        <b>What's PITI?? </b>
+        <p>
+         Principle and Interest payments, Taxes (property), and Insurance (for just your home). 
+          This term pretty much encapsulates all monthly home payments (of course not including
+          maintenance, furniture, and the like!)
+        </p>
+      </section>
+
+      <section class="col feature text-center">
+        <i class="fas fa-certificate"></i>
+        <b>What Should my DTI Be?</b>
+        <p>
+          Ideally, lenders prefer DTIs no higher than 36% (though some will go up to 43%).
+        </p>
+      </section>
+
+    </div>
 
     <div>
         <h1>Monthly Budget
@@ -73,67 +218,98 @@
         </div>
     </div>
 
-    <!-- <div class="bubbleChart"></div> -->
-
-
-   <!--  <div class="slidecontainer">
-        <input type="range" min="1" max="50" value="36" class="slider" id="myRange">
-        <p id="demo"></p>
-        <button onclick="myFunction()">Try it</button>
-    </div> -->
+   
+        
+    <!-- </div class="container">
+        <div class="row">
+            <div class="col-9">
+                <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
+                <b>How Affordable is this House?</b></h3> -->
+               <!--  Your Current Debt-to_Income Ratio is {{ dti_ratio }}%
+                <br> -->
+                <!-- Slide to See How your Monthly Payment Changes as Your DTI Ratio Changes
+                <hr>
+                <div class="slidecontainer">
+                <input type="range" min="1" max="50" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
+                <span>
+                    <p id="affordability">
+                    {% if dti_ratio < 38 %}
+                        Affordable
+                    {% elif 37 < dti_ratio < 44 %}
+                        Stretching
+                    {% else: %}
+                        Aggresive
+                    {% endif %}
+                    </p>
+                </span>
+                <span>
+                    Debt-to-Income Ratio
+                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}%</p>
+                </span><span>
+                    Monthly Payment
+                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ slider_calc }}</p>
+                </span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="sidebarContent">Side bar 1</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="sidebarContent">Side</div>
+            </div>
+        </div>
+    </div>
+ -->
 
     <div class="card">
         <div class="card-body">
             
             <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
-                <strong>Slide to see how much you can afford</strong></h3>
+                <strong>How Affordable is this House?</strong></h3>
+                Your Current Debt-to_Income Ratio is {{ dti_ratio }}%
+                <br>
+                Slide to See How Your Monthly Payment Would be Based on your DTI Ratio
             <hr>
-
+            <div id="piggy" style="font-size: 20px;">
+                <i class="fas fa-piggy-bank fa-lg"></i>
+            </div>
             <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
-                
+                <input type="range" min="1" max="50" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
                 <span>
-                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}</p>
+                    <p id="affordability">
+                    {% if dti_ratio < 38 %}
+                        Affordable
+                    {% elif 37 < dti_ratio < 44 %}
+                        Stretching
+                    {% else: %}
+                        Aggresive
+                    {% endif %}
+                    </p>
+                </span>
+                <span>
                     Debt-to-Income Ratio
+                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}%</p>
                 </span><span>
-                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ dti_ratio * mo_salary_left /100 }}</p>
-                    <br>
                     Monthly Payment
+                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ slider_calc }}</p>
                 </span>
             </div>
         </div>
     </div>
 
-            <!-- <div class="slidecontainer">
-                <input style="background-color:green;width:36%" type="range" min="1" max="36" value="{{ dti_ratio }}" class="slider" id="myRange2"></input><input style="background-color:yellow;width:14%" type="range" min="36" max="100" value="{{ dti_ratio }}" class="slider" id="myRange3"></input><input style="background-color:red;width:50%" type="range" min="36" max="100" value="{{ dti_ratio }}" class="slider" id="myRange3"></input>            
-            </div> -->
+    <div class="card">
+        <div class="card-body"></div>
+             <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
+                <strong>I could comfortably afford this home with a...</strong></h3>
+                $<div id="answer"></div>
+                <div it="answer-type"></div>
+                <button type=button class ="btn btn-secondary" id="salary">Salary</button>
+                <button type="button" class ="btn btn-secondary" id="downpayment">Downpayment</button>
+    </div>
 
-
-    <!-- <iframe width="600" height="450" frameborder="0" style="border:0"
-src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJpYu5FPHtj4ARkgr3qz5GhhE&key=AIzaSyDbqsyjf_TjqWV14JYv3EmpvQVv8j-mHtY" allowfullscreen></iframe> -->
-
-    <!-- <iframe width="600" height="450" frameborder="0" style="border:0"
-src="https://www.google.com/maps/embed/v1/view
-  ?key=YOUR_API_KEY
-  &center=37.765402,-121.918362 
-  &zoom=18
-  &maptype=satellite" allowfullscreen></iframe> -->
-
-    <!-- <div id="map_canvas" style="width:700px; height:500px; margin-left:80px;"></div> -->
-
-    <!-- <div id="map"></div> -->
-
-    <!-- <script>
-        var map;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644}, 
-                zoom:8
-            });
-        }
-    </script> -->
-<!-- I COMMENTED OUT SO IT DOESN'T CALL GOOGLE MAPS API AND CHARGE -->
-    <!-- <div id="map"></div> -->
 
     <script>
       var latitude = parseFloat('{{ home_latitude }}');
@@ -168,7 +344,13 @@ src="https://www.google.com/maps/embed/v1/view
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbqsyjf_TjqWV14JYv3EmpvQVv8j-mHtY&callback=initialize">
     </script>
+
     <script type="text/javascript">
+
+
+      $(document).ready(function(){
+        $('[data-toggle="popover"]').popover({ trigger: "hover" }); 
+      });
 
         const options = {
             responsive: true
@@ -252,14 +434,35 @@ src="https://www.google.com/maps/embed/v1/view
         // output.innerHTML = slider.value; 
         var moPay = document.getElementById("moPay"); 
         // var debts = '{{ other_debts }}'; 
+        var affordability = document.getElementById("affordability")
 
 
 
         slider.onchange = function() {
-            sliderNumber.innerHTML = this.value; 
-            moPay.innerHTML = (slider.value * random_var3 / 100) - random_var2; 
-        }
+            sliderNumber.innerHTML = this.value + "%"; 
+            var pay = ((slider.value * random_var3 / 100) - random_var2); 
+            var icon = document.getElementById("piggy")
+            var formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency', 
+                currency: 'USD'
+            });  
+            moPay.innerHTML = formatter.format(pay);
+            if (slider.value < 38) {
+                affordability.innerHTML = "Affordable";
+            }
+                else if (37 <= slider.value < 44) {
+                    affordability.innerHTML = "Stretching";
+                }
+                else{
+                    affordability.innerHTML = "Aggresive";
 
+                }
+        }
+                
+       
+      // $(function () {
+      //   $('[data-toggle="popover"]').popover()
+      // })
 
     </script>
 

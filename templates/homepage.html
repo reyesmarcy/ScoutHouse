@@ -4,27 +4,120 @@
 
 {% block content %}
 
-    <h2>Welcome</h2> 
 
-    <h3>
-        {% if session.get('username') %}
-        <a href="/userinfo">Update User Info</a></h3>
-        {% else %}
-        <a href="/userinfo">Sign Up</a></h3>
-        {% endif %}
-        
+<section class="house-1 container-fluid d-flex justify-content-center align-items-center">
+<div class="row">
+    <div class="col-xs-12">
 
-    <h3>
-        {% if session.get('username') %}
-        <a href="/logout">Log Out</a>
-        {% else %}
-        <a href="/login">Log In</a>
-        {% endif %}
-    
-    </h3>
+      <!-- <h1 class="mx-5 text-light">Find Your Dream Home</h1> -->
+      <p class="display-3 pt-5 text-light" align="center">
+        ScoutHouse
+      </p>  
+      <div class="text-center pt-5 pb-5">
+          {% if session.get('username') %}
+            <a class="btn btn-primary" href="/logout" role="button">Log Out</a>
+          {% else %}
+            <a class="btn btn-primary" href="/login" role="button">Log In</a>
+            <a class="btn btn-primary" href="/userinfo" role="button">Sign Up</a>
+          {% endif %}
+      </div>
+    </div>
 
-    <h3><a href="/searchhome">View Homes</a></h3>
+  </div>
+</section>
 
-    <h3><a href="/searchregion">View Neighborhoods</a></h3>
+<section
+      class="container-fluid d-flex justify-content-center align-items-center"
+    >
+      <div class="row">
+        <div class="column">
+          <p class="display-4 pt-5" align="center">
+            What is ScoutHouse? 
+          </p>
+            <p class="pt-3 pb-5 mx-2">After entering some basic user info, look up your dream home(s)
+            to see whether or not they're in your budget.
+            </p>s
+          <hr width="60%">
+        </div>
+      </div>
+
+</section>
+
+<div class="card mt-5 mx-auto">
+    <div class="row">
+        <div class="col p-4 mx-2">
+            <i class="fas fa-home fa-10x"></i>
+        </div>
+        <div class="col p-4 mx-2" align="center">
+            <h5>Look up Homes</h5>
+            <p>Search homes by address to see how affordable it is</p>
+            {% if session.get('username') %}
+                <a class="btn btn-primary" href="/searchhome" role="button">View Homes</a>
+            {% else %}
+                <a class="btn btn-primary" href="/login" role="button">Log In to View Homes</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card mt-5 mx-auto">
+    <div class="row">
+        <div class="col p-4 mx-2">
+            <i class="fas fa-building fa-10x"></i>
+        </div>
+        <div class="col p-4 mx-2" align="center">
+            <h5>Look up Neighborhoods</h5>
+            <p>Search regions in a city to see how affordable they are</p>
+            {% if session.get('username') %}
+                <a class="btn btn-primary" href="/searchregion" role="button">View Neighborhoods</a>
+            {% else %}
+                <a class="btn btn-primary" href="/login" role="button">Log In to View Neighborhoods</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+   <!--  <div class="row">
+        <div class="col-12">
+            {% if session.get('username') %}
+                <a href="/userinfo">Update User Info</a></h3>
+            {% else %}
+                <a href="/userinfo">Sign Up</a></h3>
+            {% endif %}
+
+            {% if session.get('username') %}
+                <a href="/logout">Log Out</a>
+            {% else %}
+                <a href="/login">Log In</a>
+            {% endif %}
+
+        </div>
+    </div> -->
+   
+    <!-- <h3><a href="/searchhome">View Homes</a></h3>
+
+    <h3><a href="/searchregion">View Neighborhoods</a></h3> -->
+
+
+</section>
+
+<!-- <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      1 of 2
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      1 of 3
+    </div>
+    <div class="col">
+      2 of 3
+    </div>
+  </div>
+</div> -->
+
+   
 
 {% endblock %}

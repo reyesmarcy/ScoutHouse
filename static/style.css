@@ -1,6 +1,6 @@
 .slidecontainer input {
     width:100%;
-    background: linear-gradient(to right, green 30%, yellow 30%, red);
+    background: linear-gradient(to right, green 72%, yellow 14%, red);
 }
 
 
@@ -29,23 +29,23 @@
     appearance: none;
     width: 25px;
     height: 25px;
-    background: #4CAF50;
+    background: #FFFFFF;
     cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4CAF50; /* Green background */
+  background: #FFFFFF; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
 /* test for sliding colors */ 
 
-
+/*
 .left-color {
     background: green;  
-}
+}*/
 
 .carousel-caption {
     top:50;
@@ -75,3 +75,57 @@
     height: 300px;
     width: 600px;
 }
+
+.sidebarContent{
+    margin-bottom: 10px;
+    min-height: 150px;
+    background-color: silver;
+    text-align: center;
+    font-size: large;
+}
+
+.liquidFillGaugeText { 
+    font-family: Helvetica; 
+    font-weight: bold; 
+}
+/* test: delete!! */ 
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.demo-1 {
+    background: no-repeat center/cover url('/static/architecture.jpg');
+}
+
+.house-1{
+    background: no-repeat center/cover url('/static/vintage_home.jpg');
+}
+
+/*.row .col {
+    margin: 0 25px;
+}*/
+
+.col-box {
+    margin: 0 25px;
+}
+
+.white {
+    background-color: white; 
+}
+
+.card-box {
+    margin: 0 25px;
+}
+
+/*#vintage-home {
+    height: 300px;
+    border: solid 1px black;
+}
+*/
+

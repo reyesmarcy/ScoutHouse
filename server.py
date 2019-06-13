@@ -202,8 +202,6 @@ def display_home():
 
     try: 
         results = getSearchResults(address, citystatezip)
-        print("LOOOOOOK AAAAT MEEEEEE")
-        print(results)
         zestimate = int(SearchResults(results).zestimate)
         
 
@@ -252,7 +250,10 @@ def display_home():
 
     mo_salary_left = home.mo_salary
     dti_ratio = int(((((home.property_taxes + home.ho_ins)/12) + home.mort_pay + user.other_debts) / home.mo_salary) * 100)
+    slider_calc = (mo_salary_left * dti_ratio)/100
 
+    ideal_ann_salary = int(((home.mort_pay * 12) + home.property_taxes + home.ho_ins + (user.other_debts * 12)) / .36)
+    # ideal_dp = 
 
     return render_template("display-home.html",
                             # data = pformat(data),
@@ -270,7 +271,9 @@ def display_home():
                             home_latitude=home_latitude, 
                             home_longitude=home_longitude, 
                             address=address, 
-                            citystatezip=citystatezip)
+                            citystatezip=citystatezip,
+                            slider_calc=format_numbers(slider_calc), 
+                            ideal_ann_salary=ideal_ann_salary)
 
     # except:
     #     flash('Please enter a valid address.')
