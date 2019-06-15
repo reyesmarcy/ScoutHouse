@@ -86,30 +86,27 @@
                 </div> 
             </div>
         </div>
+        <!-- START HERE!! -->
         <div class="row pt-2">
             <div class="col">
                 <div class="row justify content right">
                     <div class="col-1 d-flex align-items-center">
-                      
                         <i class="far fa-smile fa-2x"></i>
                     </div>
                     <div class="col">
                         <b>Remaining Monthly Budget</b>
                         <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary minus other debts and house payments, silly billy!"></i>
                         <br>
-                        {{ remaining_budget }} 
+                        {{ remaining_budget }}  
                     </div>
-                </div>   
+                </div> 
             </div>
+            <div class="col">
                 <div class="row justify content right">
                     <div class="col-1 d-flex align-items-center">
-                        {% if affordable %} 
-                            <i class="far fa-smile fa-2x"></i>
-                        {% else %}
-                            <i class="far fa-sad-tear fa-2x"></i>
-                        {% endif %}
+                        <i class="far fa-arrow-alt-circle-right fa-2x"></i>
                     </div>
-                    <div class="col justify content right">
+                    <div class="col">
                         <b>Currently...</b>
                         <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Pretty self-explanatory"></i>
                         <br>
@@ -117,53 +114,14 @@
                             Affordable! 
                         {% else: %}
                             Not affordable. 
-                        {% endif %}  
+                        {% endif %}   
                     </div>
-                </div>   
-     
+                </div> 
+            </div>
         </div>
     </section>
 
-
-    <!-- <div class="pt-3"> -->
-       <!--  Home Value : {{ zestimate }} 
-        <br> -->
-        <!-- Property Taxes  -->
-        <!-- <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed to be ~1% of Estimated Home Value"></i>
-        : {{ property_taxes }} -->
-        <!-- <a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a> -->
-<!-- </button> -->
-        <!-- <br>
-        Homeowners Insurance 
-        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed an insurance cost of $3.50 for every $1,000 of home value insured."></i>
-        : {{ ho_ins }}
-        <br>
-        Monthly Mortgage Payment 
-        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Assumed amortization of 30 years and 
-        an interest rate of 4.5% based on current rates."></i>
-        : {{ mort_pay }}
-        <br>
-        Monthly Salary 
-        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary divided by 12. Duhhhh."></i>
-        : {{ mo_salary }}
-        <br>
-        Remaining Budget 
-        <i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your salary minus other debts and house payments, silly billy!"></i>
-        : {{ remaining_budget }}
-        <br> -->
-        <!-- {{ ideal_ann_salary }} -->
-        <!-- lat/long: {{ home_latitude }}, {{ home_longitude }}
-        <br>
-        {% if session.get('username') %}
-        
-            {% if affordable %}
-                You can afford this! :) 
-            {% else: %}
-                You too poor, fool! 
-            {% endif %}  
-        {% endif %} -->
-
-<!--     </div>   -->
+   
     <hr width=60%>
 
     <div class="pt-5 row" id="featurerow">
@@ -198,85 +156,41 @@
 
     </div>
 
-    <div>
-        <h1>Monthly Budget
-            <button class="btn btn-success" onclick="updateChart()">Update</button>
-            <button class="btn btn-success" onclick="revertChart()">Revert</button>
-        </h1>
+    <div align="center">
+        <h1 class="mb-3">Your Debt-to-Income Ratio</h1>
+        <button class="btn btn-success" onclick="updateChart()">Ideal</button>
+        <button class="btn btn-success" onclick="revertChart()">Current</button>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-8">
                 <canvas id="donutChart"></canvas>
-                <div id="donutLegend" class="chart-legend"></div>
+                <!-- <div id="donutLegend" class="chart-legend"></div> -->
             </div>
-            <div class="col">
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8">
                 <canvas id="barChart"></canvas>
                 <div id="barLegend" class="chart-legend"></div>
-            </div>    
+            </div>
         </div>
+                
     </div>
 
-   
-        
-    <!-- </div class="container">
-        <div class="row">
-            <div class="col-9">
-                <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
-                <b>How Affordable is this House?</b></h3> -->
-               <!--  Your Current Debt-to_Income Ratio is {{ dti_ratio }}%
-                <br> -->
-                <!-- Slide to See How your Monthly Payment Changes as Your DTI Ratio Changes
-                <hr>
-                <div class="slidecontainer">
-                <input type="range" min="1" max="50" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
-                <span>
-                    <p id="affordability">
-                    {% if dti_ratio < 38 %}
-                        Affordable
-                    {% elif 37 < dti_ratio < 44 %}
-                        Stretching
-                    {% else: %}
-                        Aggresive
-                    {% endif %}
-                    </p>
-                </span>
-                <span>
-                    Debt-to-Income Ratio
-                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}%</p>
-                </span><span>
-                    Monthly Payment
-                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ slider_calc }}</p>
-                </span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="sidebarContent">Side bar 1</div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="sidebarContent">Side</div>
-            </div>
-        </div>
-    </div>
- -->
-
-    <div class="card">
+    <!-- <div class="card">
         <div class="card-body">
-            
-            <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
+             -->
+            <!-- <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
                 <strong>How Affordable is this House?</strong></h3>
                 Your Current Debt-to_Income Ratio is {{ dti_ratio }}%
                 <br>
                 Slide to See How Your Monthly Payment Would be Based on your DTI Ratio
-            <hr>
-            <div id="piggy" style="font-size: 20px;">
+            <hr> -->
+            <!-- <div id="piggy" style="font-size: 20px;">
                 <i class="fas fa-piggy-bank fa-lg"></i>
-            </div>
-            <div class="slidecontainer">
+            </div> -->
+            <!-- <div class="slidecontainer">
                 <input type="range" min="1" max="50" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
                 <span>
                     <p id="affordability">
@@ -296,11 +210,11 @@
                     Monthly Payment
                     <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ slider_calc }}</p>
                 </span>
-            </div>
-        </div>
-    </div>
+            </div> -->
+       <!--  </div>
+    </div> -->
 
-    <div class="card">
+   <!--  <div class="card">
         <div class="card-body"></div>
              <h3 class="text-center font-weight-bold blue-text mt-3 mb-3 pb-4">
                 <strong>I could comfortably afford this home with a...</strong></h3>
@@ -308,10 +222,87 @@
                 <div it="answer-type"></div>
                 <button type=button class ="btn btn-secondary" id="salary">Salary</button>
                 <button type="button" class ="btn btn-secondary" id="downpayment">Downpayment</button>
-    </div>
+    </div> -->
 
+
+<!-- HEY THIS IS A TEST -->
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-pills card-header-pills nav-justified" id="bologna-list" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#description" role="tab" aria-controls="description" aria-selected="true">Ideal Salary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  href="#history" role="tab" aria-controls="history" aria-selected="false">Down Payment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#deals" role="tab" aria-controls="deals" aria-selected="false">Affordability</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <!-- <h4 class="card-title">I could comfortably afford this house with a...</h4> -->
+          <!-- <h6 class="card-subtitle mb-2">Emilia-Romagna Region, Italy</h6> -->
+          
+           <div class="tab-content mt-3">
+            <div class="tab-pane active" id="description" role="tabpanel">
+                <h4 class="card-title">I could comfortably afford this house with a...</h4>
+                <p class="display-4" align="center">{{ format_numbers(ideal_ann_salary) }}</p>
+                <h4>annual salary</h4>
+
+            </div>
+             
+            <div class="tab-pane" id="history" role="tabpanel" aria-labelledby="history-tab">  
+            <h4 class="card-title">I could comfortably afford this house with a...</h4>
+              <p class="card-text">First settled around 1000 BCE and then founded as the Etruscan Felsina about 500 BCE, it was occupied by the Boii in the 4th century BCE and became a Roman colony and municipium with the name of Bononia in 196 BCE. </p>
+              <!-- <a href="#" class="card-link text-danger">Read more</a> -->
+            </div>
+             
+            <div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">
+                <h4 class="card-title">How affordable is this home?</h4>
+                <h4 class="card-title">Your Current Debt-to_Income Ratio is {{ dti_ratio }}%</h4>
+              <div class="slidecontainer">
+                <input type="range" min="1" max="50" value="{{ dti_ratio }}" class="slider" id="myRange"></input>
+                <span>
+                    <p id="affordability">
+                    {% if dti_ratio < 38 %}
+                        Affordable
+                    {% elif 37 < dti_ratio < 44 %}
+                        Stretching
+                    {% else: %}
+                        Aggresive
+                    {% endif %}
+                    </p>
+                </span>
+                <span>
+                    Debt-to-Income Ratio
+                    <p id="sliderNumber" value = "{{ dti_ratio }}">{{ dti_ratio }}%</p>
+                </span><span>
+                    Monthly Payment
+                    <p id="moPay" value = "{{ dti_ratio }} * {{ mo_salary_left}}">{{ slider_calc }}</p>
+                </span>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- HEY THIS  IS THE END OF THE TEST!! -->
 
     <script>
+        $('#bologna-list a').on('click', function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+})
+
       var latitude = parseFloat('{{ home_latitude }}');
       var longitude = parseFloat('{{ home_longitude }}');
       // function initMap() {
@@ -408,7 +399,7 @@
                                               options: options
                                             });
                                         
-        $('#barLegend').html(myBarChart.generateLegend());
+        // $('#barLegend').html(myBarChart.generateLegend());
 
         var another_var = '{{ mo_salary_left }}' * .64; 
         var another_var2 = ('{{ mo_salary_left }}' * .36) - random_var2;

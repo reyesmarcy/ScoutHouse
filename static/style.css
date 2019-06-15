@@ -100,7 +100,7 @@
 }
 
 .demo-1 {
-    background: no-repeat center/cover url('/static/architecture.jpg');
+    background: no-repeat center/cover url('/static/windows.jpg');
 }
 
 .house-1{
@@ -119,6 +119,10 @@
     background-color: white; 
 }
 
+.gold{
+    color:#C0B283;
+}
+
 .card-box {
     margin: 0 25px;
 }
@@ -128,4 +132,5 @@
     border: solid 1px black;
 }
 */
+
 
